@@ -1,0 +1,222 @@
+
+
+/*    the primary_data.lst_currency script  */
+
+USE [HQAssignment]
+GO
+
+/****** Object:  Table [primary_data].[lst_currency]    Script Date: 11/15/15 1:30:12 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [primary_data].[lst_currency](
+	[id] [int] NOT NULL,
+	[code] [char](3) NULL,
+	[name] [varchar](500) NULL,
+ CONSTRAINT [pk_lst_currency_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+SET ANSI_PADDING ON
+
+GO
+
+/****** Object:  Index [idx_lst_currency_1]    Script Date: 11/15/15 1:30:12 PM ******/
+CREATE NONCLUSTERED INDEX [idx_lst_currency_1] ON [primary_data].[lst_currency]
+(
+	[code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+
+/*  The primary_data.fx_rate script  */
+
+USE [HQAssignment]
+GO
+
+/****** Object:  Table [primary_data].[fx_rate]    Script Date: 11/15/15 1:31:20 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [primary_data].[fx_rate](
+	[id] [int] NOT NULL,
+	[prim_currency_id] [int] NULL,
+	[scnd_currency_id] [int] NULL,
+	[date] [date] NULL,
+	[currency_rate] [decimal](24, 6) NULL,
+ CONSTRAINT [pk_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+/****** Object:  Index [idx_fx_rate_1]    Script Date: 11/15/15 1:31:20 PM ******/
+CREATE NONCLUSTERED INDEX [idx_fx_rate_1] ON [primary_data].[fx_rate]
+(
+	[prim_currency_id] ASC,
+	[scnd_currency_id] ASC,
+	[date] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+ALTER TABLE [primary_data].[fx_rate]  WITH CHECK ADD  CONSTRAINT [fk_prim_currency_id] FOREIGN KEY([prim_currency_id])
+REFERENCES [primary_data].[lst_currency] ([id])
+GO
+
+ALTER TABLE [primary_data].[fx_rate] CHECK CONSTRAINT [fk_prim_currency_id]
+GO
+
+ALTER TABLE [primary_data].[fx_rate]  WITH CHECK ADD  CONSTRAINT [fk_scnd_currency_id] FOREIGN KEY([scnd_currency_id])
+REFERENCES [primary_data].[lst_currency] ([id])
+GO
+
+ALTER TABLE [primary_data].[fx_rate] CHECK CONSTRAINT [fk_scnd_currency_id]
+GO
+
+/*  The primary_data.offer table script */
+
+USE [HQAssignment]
+GO
+
+/****** Object:  Table [primary_data].[offer]    Script Date: 11/15/15 1:31:51 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [primary_data].[offer](
+	[id] [int] NOT NULL,
+	[hotel_id] [int] NULL,
+	[currency_id] [int] NULL,
+	[source_system_code] [varchar](50) NULL,
+	[available_cnt] [int] NULL,
+	[sellings_price] [float] NULL,
+	[checkin_date] [date] NULL,
+	[checkout_date] [date] NULL,
+	[valid_offer_flag] [bit] NULL,
+	[offer_valid_from] [datetime] NULL,
+	[offer_valid_to] [datetime] NULL,
+	[breakfast_included_flag] [bit] NULL,
+	[insert_datetime] [datetime] NULL,
+ CONSTRAINT [pk_offer_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+/****** Object:  Index [idx_offer_1]    Script Date: 11/15/15 1:31:51 PM ******/
+CREATE NONCLUSTERED INDEX [idx_offer_1] ON [primary_data].[offer]
+(
+	[valid_offer_flag] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+/****** Object:  Index [idx_offer_2]    Script Date: 11/15/15 1:31:51 PM ******/
+CREATE NONCLUSTERED INDEX [idx_offer_2] ON [primary_data].[offer]
+(
+	[hotel_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+/****** Object:  Index [idx_offer_3]    Script Date: 11/15/15 1:31:51 PM ******/
+CREATE NONCLUSTERED INDEX [idx_offer_3] ON [primary_data].[offer]
+(
+	[hotel_id] ASC,
+	[checkin_date] DESC,
+	[checkout_date] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+ALTER TABLE [primary_data].[offer]  WITH CHECK ADD  CONSTRAINT [fk_curreny_id] FOREIGN KEY([currency_id])
+REFERENCES [primary_data].[lst_currency] ([id])
+GO
+
+ALTER TABLE [primary_data].[offer] CHECK CONSTRAINT [fk_curreny_id]
+GO
+
+
+/*    The   primary_data.fileNamesAndPaths script.
+      The table is created to manage the files to be imported locations. 
+      Since I have created the stored procedures to import the files, thought of making them dynamic.
+      
+      The insert statements for the below tables are : 
+      
+      INSERT INTO primary_data.fileNamesAndPaths ( [fileName],[filePath]) VALUES ('offer.csv','E:\Amar\Assignment\')
+      INSERT INTO primary_data.fileNamesAndPaths ( [fileName],[filePath]) VALUES ('fx_rate.csv','E:\Amar\Assignment\')
+      INSERT INTO primary_data.fileNamesAndPaths ( [fileName],[filePath]) VALUES ('lst_currency.csv','E:\Amar\Assignment\')
+
+*/
+
+USE [HQAssignment]
+GO
+
+/****** Object:  Table [primary_data].[fileNamesAndPaths]    Script Date: 11/15/15 1:33:07 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [primary_data].[fileNamesAndPaths](
+	[pathID] [int] IDENTITY(1,1) NOT NULL,
+	[fileName] [varchar](50) NULL,
+	[filePath] [varchar](800) NULL,
+ CONSTRAINT [pk_pathID] PRIMARY KEY CLUSTERED 
+(
+	[pathID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+SET ANSI_PADDING ON
+
+GO
+
+/****** Object:  Index [idx_fileNamesAndPaths_1]    Script Date: 11/15/15 1:33:07 PM ******/
+CREATE NONCLUSTERED INDEX [idx_fileNamesAndPaths_1] ON [primary_data].[fileNamesAndPaths]
+(
+	[fileName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+
+
+
+
+
+
+
