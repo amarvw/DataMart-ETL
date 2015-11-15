@@ -1,0 +1,12 @@
+/*  I am using MS-SQL server 2008 R2 Enterprise Edition  */
+
+/*  to create the HQAssignment Database for the whole exercise    */
+CREATE DATABASE HQAssignment;
+
+
+/*  The required two schemas  */
+USE HQAssignment;
+GO
+CREATE SCHEMA primary_data;
+GO 
+CREATE SCHEMA bi_data;
